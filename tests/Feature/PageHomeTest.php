@@ -8,47 +8,37 @@ use function Pest\Laravel\get;
 uses(RefreshDatabase::class);
 
 it('should show courses overview', function () {
-    Course::factory()->createMany([
-        ['title' => 'Course A', 'description' => 'Description Course A', 'released_at' => now()],
-        ['title' => 'Course B', 'description' => 'Description Course B', 'released_at' => now()],
-        ['title' => 'Course C', 'description' => 'Description Course C', 'released_at' => now()],
-    ]);
+    $firstCourse = Course::factory()->released()->create();
+    $secondCourse = Course::factory()->released()->create();
+    $thirdCourse = Course::factory()->released()->create();
 
     get(route('home'))
         ->assertSeeText([
-            'Course A',
-            'Description Course A',
-            'Course B',
-            'Description Course B',
-            'Course C',
-            'Description Course C',
+            $firstCourse->title,
+            $firstCourse->description,
+            $secondCourse->title,
+            $secondCourse->description,
+            $thirdCourse->title,
+            $thirdCourse->description,
         ]);
 });
 
 it('should show only released courses', function () {
-    Course::factory()->createMany([
-        ['title' => 'Course A', 'released_at' => now()->yesterday()],
-        ['title' => 'Course B'],
-    ]);
+    $releasedCourse = Course::factory()->released()->create();
+    $notReleasedCourse = Course::factory()->create();
 
     get(route('home'))
-        ->assertSeeText([
-            'Course A',
-        ])
-        ->assertDontSeeText([
-            'Course B',
-        ]);
+        ->assertSeeText($releasedCourse->title)
+        ->assertDontSeeText($notReleasedCourse->title);
 });
 
 it('should show courses by release date', function () {
-    Course::factory()->createMany([
-        ['title' => 'Course A', 'released_at' => now()->yesterday()],
-        ['title' => 'Course B', 'released_at' => now()],
-    ]);
+    $releasedCourse = Course::factory()->released(now()->yesterday())->create();
+    $newestReleasedCourse = Course::factory()->released()->create();
 
     get(route('home'))
         ->assertSeeTextInOrder([
-            'Course B',
-            'Course A',
+            $newestReleasedCourse->title,
+            $releasedCourse->title,
         ]);
 });
