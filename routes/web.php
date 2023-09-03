@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageHomeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +15,3 @@ use App\Http\Controllers\PageHomeController;
 */
 
 Route::get('/', PageHomeController::class)->name('home');
-
