@@ -18,8 +18,12 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
+            'slug' => fake()->slug(),
+            'tagline' => fake()->sentence(),
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
+            'image_name' => 'image.png',
+            'learnings' => ['Learn A', 'Learn B', 'Learn C'],
         ];
     }
 
