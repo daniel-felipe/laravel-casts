@@ -8,14 +8,14 @@ use function Pest\Laravel\get;
 it('should find unreleased course', function () {
     $course = Course::factory()->create();
 
-    get(route('course-details', $course))
+    get(route('pages.course-details', $course))
         ->assertNotFound();
 });
 
 it('should show course details', function () {
     $course = Course::factory()->released()->create();
 
-    get(route('course-details', $course))
+    get(route('pages.course-details', $course))
         ->assertOk()
         ->assertSeeText([
             $course->title,
@@ -31,7 +31,7 @@ it('should show course video count', function () {
         ->released()
         ->create();
 
-    get(route('course-details', $course))
+    get(route('pages.course-details', $course))
         ->assertOk()
         ->assertSeeText('3 videos');
 });
